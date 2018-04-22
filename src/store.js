@@ -50,6 +50,11 @@ const rankingReducer = (state = rankingState, action) => {
       });
     case 'UPDATE_RANKING':
       return action.payload;
+    case 'CROWN':
+      return [
+        ...state.filter(rank => rank.person.id !== action.payload.id),
+        { points_count: 0, person: action.payload },
+      ];
     default:
       return state;
   }
@@ -111,6 +116,8 @@ const snackbarReducer = (state = snackbarState, action) => {
       return { open: true, message: 'Errore di connessione con il server' };
     case SCORE_POINT_ROLLBACK:
       return { open: true, message: `Non ho segnato "${action.payload.point.word.name}" a ${action.payload.point.person.name}` };
+    case 'CROWN':
+      return { open: true, message: `${action.payload.name} è stato incoronato vincitore!` };
     default:
       return state;
   }
@@ -132,12 +139,27 @@ const snackbarReducer = (state = snackbarState, action) => {
 //   }
 // };
 
+const confirmScoreState = { open: false, person: null, word: null };
+
+const confirmScoreReducer = (state = confirmScoreState, action) => {
+  switch (action.type) {
+    case 'TOGGLE_CONFIRM_SCORE':
+      return { ...state, open: action.payload };
+    case 'SET_CONFIRM_SCORE':
+      return { open: true, person: action.payload.person, word: action.payload.word };
+    default:
+      return state;
+  }
+};
+
+
 const rootReducer = combineReducers({
   people: peopleReducer,
   ranking: rankingReducer,
   words: wordsReducer,
   points: pointsReducer,
   snackbar: snackbarReducer,
+  confirmScore: confirmScoreReducer,
 });
 
 const store = createStore(

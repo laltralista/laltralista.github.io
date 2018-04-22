@@ -68,10 +68,46 @@ export const scorePoint = (person, word) => async (dispatch) => {
   if (!response || !response.ok) {
     dispatch({ type: 'FETCH_FAILED' });
     dispatch({ type: 'SCORE_POINT_ROLLBACK', payload: { point } });
-    return
+    return;
   }
 
   dispatch({ type: 'SCORE_POINT_COMMIT', payload: { point: json, oldPoint: point } });
+};
+
+export const closeConfirmScore = () => (dispatch) => {
+  dispatch({ type: 'TOGGLE_CONFIRM_SCORE', payload: false });
+};
+
+export const openConfirmScore = () => (dispatch) => {
+  dispatch({ type: 'TOGGLE_CONFIRM_SCORE', payload: true });
+};
+
+export const setConfirmScore = (person, word) => (dispatch) => {
+  dispatch({ type: 'SET_CONFIRM_SCORE', payload: { person, word } });
+};
+
+export const crown = person => async (dispatch) => {
+  dispatch({ type: 'CROWN_LOADING', payload: person });
+
+  let response;
+  // let json;
+  try {
+    response = await fetch(`${ENDPOINT}/winners`, {
+      body: JSON.stringify({ winner: { person_id: person.id } }),
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    });
+    // json = await response.json();
+  } catch (e) {}
+
+  if (!response || !response.ok) {
+    dispatch({ type: 'CROWN_FAILED', payload: person });
+    return;
+  }
+
+  dispatch({ type: 'CROWN', payload: person });
+
+  dispatch(update('ranking', '/people/ranking'));
 };
 
   // handleClick = () => {

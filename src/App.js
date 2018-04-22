@@ -21,6 +21,7 @@ import Ranking from './components/Ranking';
 import Score from './components/Score';
 import History from './components/History';
 import Navigation from './components/Navigation';
+import ConfirmScore from './components/ConfirmScore';
 
 
 const mapStateToProps = state => ({ snackbar: state.snackbar });
@@ -68,6 +69,9 @@ class App extends Component {
         <div className="footer">
           <Navigation />
         </div>
+
+        <ConfirmScore />
+
         <Snackbar
           style={{bottom: 56}}
           open={this.props.snackbar.open}
