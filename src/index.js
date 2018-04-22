@@ -7,7 +7,7 @@ import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 // import { blue500, blue700 } from 'material-ui/styles/colors';
 
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 
 import './index.css';
 import App from './App';
@@ -35,9 +35,9 @@ const myTheme = {
 ReactDOM.render(
   <MuiThemeProvider muiTheme={getMuiTheme(myTheme)}>
     <Provider store={store}>
-      <BrowserRouter>
+      <Router>
         <App />
-      </BrowserRouter>
+      </Router>
     </Provider>
   </MuiThemeProvider>,
   document.getElementById('root')
